@@ -11,11 +11,11 @@ const BANNER_IMAGES = [
     title: 'Opções',
     description: 'Confira nossas opções'
   },
-  {
-    url: 'https://media.discordapp.net/attachments/1025173249543393330/1369386000744189972/image.png?ex=681bab98&is=681a5a18&hm=e1b49c203b5044b5fa2d074af39a2b583de9a0b7be08b4dd7764339f85d7d490&=&format=webp&quality=lossless&width=2506&height=1104',
-    title: 'Ofertas Especiais',
-    description: 'Aproveite nossas promoções exclusivas'
-  }
+  // {
+  //   url: 'https://media.discordapp.net/attachments/1025173249543393330/1369386000744189972/image.png?ex=681bab98&is=681a5a18&hm=e1b49c203b5044b5fa2d074af39a2b583de9a0b7be08b4dd7764339f85d7d490&=&format=webp&quality=lossless&width=2506&height=1104',
+  //   title: 'Ofertas Especiais',
+  //   description: 'Aproveite nossas promoções exclusivas'
+  // }
 ];
 
 export function Carousel() {
