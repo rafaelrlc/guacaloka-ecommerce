@@ -45,7 +45,7 @@ export function Footer() {
         
         <div className="border-t border-gray-200 mt-8 pt-6 text-center">
           <p className="text-gray-600">
-            © {new Date().getFullYear()} Sua Loja. Todos os direitos reservados.
+            © {new Date().getFullYear()} GuacaLoka. Todos os direitos reservados.
           </p>
         </div>
       </div>

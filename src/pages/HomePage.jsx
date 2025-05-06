@@ -33,7 +33,16 @@ export function HomePage() {
     fetchProducts();
   }, []);
 
-  if (loading) return <div className="container mx-auto px-4 py-8 text-yellow-800">Carregando produtos...</div>;
+  if (loading) {
+    return (
+      <div className="min-h-[calc(100vh-88px)] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-yellow-800 font-medium">Carregando produtos...</p>
+        </div>
+      </div>
+    );
+  }
   if (error) return <div className="container mx-auto px-4 py-8 text-red-600">{error}</div>;
 
   return (
@@ -41,7 +50,7 @@ export function HomePage() {
       <Carousel />
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-4xl font-extrabold text-yellow-900 drop-shadow ">Menu:</h1>
+          {/* <h1 className="text-4xl font-extrabold text-yellow-900 drop-shadow ">Menu:</h1> */}
           <div className="flex gap-2">
             {CATEGORIES.map((cat) => (
               <button

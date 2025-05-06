@@ -16,7 +16,7 @@ function App() {
         <CartProvider>
           <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-orange-100 to-green-100">
             <Header />
-            <main>
+            <main className="pt-24">
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/product/:id" element={<ProductDetail />} />
