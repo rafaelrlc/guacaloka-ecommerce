@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export function Login() {
   const [isRegister, setIsRegister] = useState(false);
@@ -9,35 +12,41 @@ export function Login() {
     password: '',
     address: { street: '', city: '', state: '', zip: '' }
   });
-  const [message, setMessage] = useState('');
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setMessage('');
     try {
-      const res = await fetch('http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/auth/login', {
+      const res = await fetch('http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginData)
       });
       const data = await res.json();
+      console.log("login realizado", data);
       if (res.ok) {
-        setMessage('Login realizado com sucesso!');
-        // Salvar token e dados do usuário
         localStorage.setItem('token', data.token);
         localStorage.setItem('customer', JSON.stringify(data.customer));
-        window.location.href = '/';
+        login(data.token, data.customer);
+        toast.success('Login realizado com sucesso!');
+        setTimeout(() => {
+          navigate('/');
+        }, 100);
       } else {
-        setMessage(data.message || 'Erro ao fazer login');
+        console.log("erro ao fazer login", data);
+        toast.error(data.message || 'Erro ao fazer login');
       }
     } catch (err) {
-      setMessage('Erro de conexão');
+      console.log("erro ao fazer login", err);
+      toast.error('Credenciais inválidas');
     }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setMessage('');
+
+    console.log("registerData", registerData);  
     try {
       const res = await fetch('http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/customers', {
         method: 'POST',
@@ -45,14 +54,17 @@ export function Login() {
         body: JSON.stringify(registerData)
       });
       const data = await res.json();
+      console.log("res", res);
       if (res.ok) {
-        setMessage('Cadastro realizado com sucesso! Faça login.');
+        toast.success('Cadastro realizado com sucesso! Faça login.');
         setIsRegister(false);
       } else {
-        setMessage(data.message || 'Erro ao cadastrar');
+        console.log("erro ao cadastrar aqui", data);
+        toast.error(data.message || 'Erro ao cadastrar');
       }
     } catch (err) {
-      setMessage('Erro de conexão');
+      console.log("erro ao cadastrar", err);
+      toast.error('Credenciais inválidas');
     }
   };
 
@@ -73,7 +85,6 @@ export function Login() {
             Cadastro
           </button>
         </div>
-        {message && <div className="mb-4 text-center text-red-500">{message}</div>}
         {!isRegister ? (
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
             <input

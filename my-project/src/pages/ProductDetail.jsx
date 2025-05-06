@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
 export function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { isLoggedIn } = useAuth();
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -46,7 +49,13 @@ export function ProductDetail() {
   }
 
   const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      toast.error('Você precisa estar logado para adicionar itens ao carrinho');
+      navigate('/login');
+      return;
+    }
     addToCart(product.id || id, quantity);
+    toast.success('Produto adicionado ao carrinho!');
     navigate('/cart');
   };
 

@@ -1,9 +1,16 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 export function Header() {
   const { cart } = useCart();
+  const { isLoggedIn, logout } = useAuth();
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  const handleLogout = () => {
+    logout();
+    window.location.href = '/';
+  };
 
   return (
     <header className="bg-white shadow-md">
@@ -32,12 +39,21 @@ export function Header() {
             </svg>
             <span>{totalItems}</span>
           </Link>
-          <Link
-            to="/login"
-            className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
-          >
-            Login
-          </Link>
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+            >
+              Sair
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+            >
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </header>
