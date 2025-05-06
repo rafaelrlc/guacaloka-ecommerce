@@ -1,11 +1,11 @@
 import { useCart } from '../context/CartContext';
-
+import { useEffect } from 'react';
 export function Cart() {
   const { cart, loading, total, fetchCart } = useCart();
 
   // Atualiza o carrinho ao entrar na página
   // (caso o usuário tenha adicionado produtos em outra aba/página)
-  // useEffect(() => { fetchCart(); }, []); // Descomente se quiser sempre atualizar
+  useEffect(() => { fetchCart(); }, []); // Descomente se quiser sempre atualizar
 
   if (loading) {
     return <div className="container mx-auto px-4 py-8">Carregando carrinho...</div>;

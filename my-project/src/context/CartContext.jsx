@@ -9,9 +9,11 @@ export function CartProvider({ children }) {
 
   // Busca o carrinho do usuário logado
   const fetchCart = async () => {
+    console.log("fetchCart");
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
+      console.log("token cart", token);
       const res = await fetch('http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/cart', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -32,6 +34,7 @@ export function CartProvider({ children }) {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    console.log("token cart useEffect", token);
     if (token) fetchCart();
   }, []);
 
