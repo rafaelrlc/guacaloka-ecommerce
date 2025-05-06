@@ -14,7 +14,7 @@ function App() {
     <Router>
       <AuthProvider>
         <CartProvider>
-          <div className="bg-gray-100">
+          <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-orange-100 to-green-100">
             <Header />
             <main>
               <Routes>

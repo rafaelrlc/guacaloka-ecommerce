@@ -38,12 +38,12 @@ export function ProductDetail() {
   }, [id]);
 
   if (loading) {
-    return <div className="container mx-auto px-4 py-8">Carregando produto...</div>;
+    return <div className="container mx-auto px-4 py-8 text-yellow-800">Carregando produto...</div>;
   }
   if (error || !product) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <p className="text-red-500">Produto não encontrado</p>
+        <p className="text-red-600">Produto não encontrado</p>
       </div>
     );
   }
@@ -61,23 +61,25 @@ export function ProductDetail() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="max-w-4xl mx-auto bg-gradient-to-br from-yellow-100 via-orange-100 to-green-100 rounded-2xl shadow-lg overflow-hidden border-4 border-yellow-400">
         <div className="p-8">
           <img
             src={product.picture_url}
             alt={product.name}
-            className="w-full max-h-[200px] object-contain mb-8 rounded"
+            className="w-full max-h-[200px] object-contain mb-8 rounded-lg"
           />
-          <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-          <p className="text-gray-600 mb-6">{product.description}</p>
+          <h1 className="text-3xl font-extrabold mb-4 text-yellow-900">{product.name}</h1>
+          <p className="text-orange-700 mb-6">{product.description}</p>
           <div className="mb-6">
-            <span className="text-2xl font-bold text-blue-600">
+            <span className="text-2xl font-bold text-yellow-900 bg-yellow-200 px-2 py-1 rounded shadow">
               ${product.price.toFixed(2)}
             </span>
-            <span className="ml-4 text-gray-500">{product.category?.name}</span>
+            <span className="ml-4 text-green-700 bg-green-100 px-2 py-1 rounded">
+              {product.category?.name}
+            </span>
           </div>
           <div className="flex items-center gap-4 mb-6">
-            <label htmlFor="quantity" className="font-semibold">
+            <label htmlFor="quantity" className="font-semibold text-green-800">
               Quantidade:
             </label>
             <input
@@ -86,12 +88,12 @@ export function ProductDetail() {
               min="1"
               value={quantity}
               onChange={(e) => setQuantity(parseInt(e.target.value))}
-              className="w-20 px-3 py-2 border rounded-lg"
+              className="w-20 px-3 py-2 border-2 border-yellow-400 rounded-lg"
             />
           </div>
           <button
             onClick={handleAddToCart}
-            className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors"
+            className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors shadow-md border-2 border-yellow-400 font-bold text-lg"
           >
             Adicionar ao Carrinho
           </button>

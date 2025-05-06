@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+
+body {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: none;
+}
+

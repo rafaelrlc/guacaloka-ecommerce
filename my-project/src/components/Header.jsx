@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useState, useRef, useEffect } from 'react';
+import guacalokaLogo from '../assets/guacaloka.png';
 
 export function Header() {
   const { cart } = useCart();
@@ -27,15 +28,15 @@ export function Header() {
   }, []);
 
   return (
-    <header className="bg-white shadow-md">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold text-gray-800">
-          E-Commerce
+    <header className="bg-gradient-to-r from-yellow-400 via-orange-400 to-green-600 shadow-lg border-b-4 border-yellow-700">
+      <div className="container mx-auto px-4 py-2 flex justify-between items-center">
+        <Link to="/" className="flex items-center gap-3">
+          <img src={guacalokaLogo} alt="Guacaloka Logo" className="h-20 w-20" />
         </Link>
         <div className="flex items-center gap-4">
           <Link
             to="/cart"
-            className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors shadow-md border-2 border-yellow-400"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +59,7 @@ export function Header() {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-yellow-300 hover:bg-yellow-400 transition-colors border-2 border-yellow-600 shadow"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +78,7 @@ export function Header() {
               </button>
               
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 border-2 border-yellow-400">
                   <Link
                     to="/purchase-history"
                     className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
@@ -97,7 +98,7 @@ export function Header() {
           ) : (
             <Link
               to="/login"
-              className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+              className="bg-yellow-300 text-yellow-900 px-4 py-2 rounded-lg hover:bg-yellow-400 transition-colors border-2 border-yellow-600 shadow"
             >
               Login
             </Link>
