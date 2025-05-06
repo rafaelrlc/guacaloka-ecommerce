@@ -1,5 +1,7 @@
 import { useCart } from '../context/CartContext';
 import { useEffect } from 'react';
+import carrinhoVazio from '../assets/carrinho-vazio.png';
+
 export function Cart() {
   const { cart, loading, total, fetchCart } = useCart();
 
@@ -14,8 +16,8 @@ export function Cart() {
   if (!cart || cart.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8 text-yellow-900 ">Seu Carrinho</h1>
-        <p className="text-orange-700">Seu carrinho está vazio</p>
+        {/* <h1 className="text-3xl font-bold mb-8 text-yellow-900 ">Seu Carrinho</h1> */}
+        <img src={carrinhoVazio} alt="Carrinho vazio" className="mx-auto h-[500px] w-[500px] mt-10" />
       </div>
     );
   }
