@@ -6,6 +6,7 @@ import { HomePage } from './pages/HomePage';
 import { ProductDetail } from './pages/ProductDetail';
 import { Cart } from './pages/Cart';
 import { Login } from './pages/Login';
+import { PurchaseHistory } from './pages/PurchaseHistory';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/purchase-history" element={<PurchaseHistory />} />
               </Routes>
             </main>
             <Toaster position="bottom-right" />
