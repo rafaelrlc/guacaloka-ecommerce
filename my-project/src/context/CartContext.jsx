@@ -12,7 +12,7 @@ export function CartProvider({ children }) {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:3000/dev/cart', {
+      const res = await fetch('http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/cart', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -22,6 +22,7 @@ export function CartProvider({ children }) {
       setCart(data.items || []);
       setTotal(data.total || 0);
     } catch (err) {
+      console.log(err);
       setCart([]);
       setTotal(0);
     } finally {
@@ -37,7 +38,7 @@ export function CartProvider({ children }) {
   // Adiciona item ao carrinho via API
   const addToCart = async (productId, quantity) => {
     const token = localStorage.getItem('token');
-    await fetch('http://localhost:3000/dev/cart/item', {
+    await fetch('http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/cart/item', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
