@@ -92,11 +92,35 @@ export function CartProvider({ children }) {
       }
 
       const data = await response.json();
-      toast.success(`Frete calculado: ${data.frete}`);
+      // toast.success(`Frete calculado: ${data.frete}`);
       return data;
     } catch (error) {
       console.error('Erro ao calcular frete:', error);
       toast.error('CEP inválido.');
+    }
+  }
+
+  const placeCheckout = async (order) => {
+    console.log('Dados do pedido:', order);
+    try {
+      const response = await fetch('http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/checkout', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(order),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Erro ao realizar o checkout');
+      }
+  
+      const data = await response.json();
+      toast.success('Compra realizada com sucesso!');
+      console.log('Resposta do checkout:', data);
+    } catch (error) {
+      console.error('Erro ao realizar o checkout:', error);
+      toast.error('Erro ao realizar o checkout. Tente novamente mais tarde.');
     }
   }
 
@@ -131,7 +155,7 @@ export function CartProvider({ children }) {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, fetchCart, loading, total, removeItemFromCart, placeOrderCheckout, calculateShipping }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, fetchCart, loading, total, removeItemFromCart, placeOrderCheckout, calculateShipping, placeCheckout }}>
       {children}
     </CartContext.Provider>
   );

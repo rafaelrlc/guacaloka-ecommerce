@@ -4,9 +4,8 @@ import { Carousel } from '../components/Carousel';
 import { Footer } from '../components/Footer';
 
 const CATEGORIES = [
-  { label: 'Books', value: 'Books' },
-  { label: 'Electronics', value: 'Electronics' },
-  { label: 'Clothing', value: 'Clothing' },
+  { label: 'Clássico', value: 'Clássico' },
+  { label: 'Combos', value: 'Combos' },
 ];
 
 export function HomePage() {

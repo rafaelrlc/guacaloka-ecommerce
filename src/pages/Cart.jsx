@@ -8,10 +8,9 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 export function Cart() {
-  const { cart, loading, fetchCart, removeItemFromCart, placeOrderCheckout, calculateShipping } = useCart();
+  const { cart, loading, fetchCart, removeItemFromCart, placeOrderCheckout, calculateShipping, placeCheckout } = useCart();
   const navigate = useNavigate();
 
-  const [showCheckout, setShowCheckout] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('credit_card');
   const [checkoutResponse, setCheckoutResponse] = useState(null);
   const [cep, setCep] = useState('');
@@ -20,8 +19,6 @@ export function Cart() {
   const [street, setStreet] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
-
-  console.log('Cart:', cart);
 
   if (loading) {
     return <div className="container mx-auto px-4 py-8 text-yellow-800">Carregando carrinho...</div>;
@@ -46,7 +43,22 @@ export function Cart() {
   };
 
   const handleCheckout = () => {
-    setShowCheckout(true);
+    const cartItems = cart.map((item) => ({
+      product_id: item.item_id,
+      quantity: item.quantity,
+    }));
+  
+    const checkoutData = {
+      cart_items: cartItems,
+      payment_method: paymentMethod,
+    };
+
+    try {
+      const data = placeCheckout(checkoutData);
+    }
+    catch (error) {
+      console.error('Erro ao finalizar pedido:', error);
+    }
   };
 
   const handlePlaceOrder = async () => {
@@ -56,7 +68,7 @@ export function Cart() {
     }));
 
     const paymentData = {
-      "cart_items": cartItems,
+      // "cart_items": cartItems,
       "payment_method": paymentMethod,
     }
 
@@ -81,7 +93,7 @@ export function Cart() {
 
   const handleCalculateShipping = async (cep) => {
     try {
-      const formattedCep = cep.replace('-', ''); // Remove o traço do CEP
+      const formattedCep = cep.replace('-', '');
       console.log('Calculando frete para o CEP:', formattedCep);
       const response = await calculateShipping(formattedCep);
       console.log('Frete calculado:', response);
@@ -107,7 +119,7 @@ export function Cart() {
             className="p-6 border-b last:border-b-0 flex items-center justify-between border-yellow-200"
           >
             <div className="flex-1">
-              <img src={item.picture_url} className='h-14 w-14'/>
+              <img src={item.picture_url} className='h-14 w-14' />
               <h2 className="text-xl font-bold text-green-800">{item.product_name}</h2>
               <p className="text-orange-700">R${item.price_at_purchase.toFixed(2)}</p>
               <p className="text-sm text-gray-600">{item.product_description}</p>
@@ -144,6 +156,10 @@ export function Cart() {
                     onClick={() => {
                       setFrete(null);
                       setCep('');
+                      setBairro('');
+                      setStreet('');
+                      setCity('');
+                      setState('');
                     }}
                     className="bg-yellow-400 text-white text-sm font-bold px-4 py-2 rounded shadow hover:bg-yellow-500 transition"
                   >
@@ -170,6 +186,76 @@ export function Cart() {
               )}
             </div>
           </div>
+
+          {frete && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-sm font-bold mb-2 text-gray-700">Bairro:</label>
+                <input
+                  type="text"
+                  value={bairro}
+                  disabled
+                  className="w-full p-3 border-2 border-gray-300 rounded bg-gray-100"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-2 text-gray-700">Endereço:</label>
+                <input
+                  type="text"
+                  value={street}
+                  disabled
+                  className="w-full p-3 border-2 border-gray-300 rounded bg-gray-100"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-2 text-gray-700">Cidade:</label>
+                <input
+                  type="text"
+                  value={city}
+                  disabled
+                  className="w-full p-3 border-2 border-gray-300 rounded bg-gray-100"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-2 text-gray-700">Estado:</label>
+                <input
+                  type="text"
+                  value={state}
+                  disabled
+                  className="w-full p-3 border-2 border-gray-300 rounded bg-gray-100"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-2 text-gray-700">Número:</label>
+                <input
+                  type="text"
+                  placeholder="Digite o número (opcional)"
+                  className="w-full p-3 border-2 border-yellow-400 rounded"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-2 text-gray-700">Complemento:</label>
+                <input
+                  type="text"
+                  placeholder="Digite o complemento (opcional)"
+                  className="w-full p-3 border-2 border-yellow-400 rounded"
+                />
+              </div>
+              <div className="col-span-2">
+                <label className="block text-sm font-bold mb-2 text-gray-700">Método de Pagamento:</label>
+                <select
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="w-full p-3 border-2 border-yellow-400 rounded bg-white"
+                >
+                  <option value="credit_card">Cartão de Crédito</option>
+                  <option value="pix">Pix</option>
+                  <option value="boleto">Boleto</option>
+                </select>
+              </div>
+            </div>
+          )}
+
           <div className="flex justify-between items-center mb-4">
             <span className="text-xl font-bold text-yellow-900">Total:</span>
             <span className="text-2xl font-bold text-green-700 bg-green-100 px-3 py-1 rounded shadow">
@@ -179,8 +265,8 @@ export function Cart() {
           <button
             onClick={handleCheckout}
             className={`w-full text-white text-lg font-bold py-3 rounded shadow transition ${frete
-                ? 'bg-green-600 hover:bg-green-700'
-                : 'bg-gray-400 cursor-not-allowed'
+              ? 'bg-green-600 hover:bg-green-700'
+              : 'bg-gray-400 cursor-not-allowed'
               }`}
             disabled={!frete}
           >
@@ -188,38 +274,6 @@ export function Cart() {
           </button>
         </div>
       </div>
-
-      {showCheckout && (
-        <div className="mt-6 p-6 bg-gray-100 rounded shadow">
-          <h2 className="text-2xl font-bold mb-4 text-yellow-900">Finalizar Pedido</h2>
-          <div className="mb-4">
-            <label className="block text-lg font-bold mb-2 text-gray-700">Forma de Pagamento:</label>
-            <select
-              value={paymentMethod}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-              className="w-full p-3 border rounded shadow"
-            >
-              <option value="credit_card">Cartão de Crédito</option>
-              <option value="pix">Pix</option>
-              <option value="boleto">Boleto</option>
-            </select>
-          </div>
-          <button
-            onClick={handlePlaceOrder}
-            className="w-full bg-blue-600 text-white text-lg font-bold py-3 rounded shadow hover:bg-blue-700 transition"
-          >
-            Confirmar Pedido
-          </button>
-          {checkoutResponse && (
-            <div className="mt-4 p-4 bg-green-100 border-l-4 border-green-500">
-              <p className="text-green-800 font-bold">{checkoutResponse.message}</p>
-              <p>ID do Pedido: {checkoutResponse.order.order_id}</p>
-              <p>Status: {checkoutResponse.order.status}</p>
-              <p>Total: ${checkoutResponse.order.total.toFixed(2)}</p>
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }

@@ -6,13 +6,12 @@ export function PurchaseHistory() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { user } = useAuth();
 
   useEffect(() => {
     const fetchOrderHistory = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/orders/history/${user.id}`, {
+        const response = await fetch(`http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/orders/history`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -31,10 +30,9 @@ export function PurchaseHistory() {
       }
     };
 
-    if (user?.id) {
-      fetchOrderHistory();
-    }
-  }, [user]);
+    fetchOrderHistory();
+
+  }, []);
 
   if (loading) {
     return (
