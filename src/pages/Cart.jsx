@@ -15,6 +15,11 @@ export function Cart() {
   const [paymentMethod, setPaymentMethod] = useState('credit_card');
   const [checkoutResponse, setCheckoutResponse] = useState(null);
   const [cep, setCep] = useState('');
+  const [frete, setFrete] = useState(null);
+  const [bairro, setBairro] = useState('');
+  const [street, setStreet] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
 
   console.log('Cart:', cart);
 
@@ -80,7 +85,12 @@ export function Cart() {
       console.log('Calculando frete para o CEP:', formattedCep);
       const response = await calculateShipping(formattedCep);
       console.log('Frete calculado:', response);
-      // toast.success(`Frete calculado: ${response.frete}`);
+      setFrete(response.frete);
+      setBairro(response.bairro);
+      setStreet(response.logradouro);
+      setCity(response.localidade);
+      setState(response.estado);
+
     } catch (error) {
       console.error('Erro ao calcular frete:', error);
       toast.error('Erro ao calcular frete. Tente novamente mais tarde.');
@@ -97,6 +107,7 @@ export function Cart() {
             className="p-6 border-b last:border-b-0 flex items-center justify-between border-yellow-200"
           >
             <div className="flex-1">
+              <img src={item.picture_url} className='h-14 w-14'/>
               <h2 className="text-xl font-bold text-green-800">{item.product_name}</h2>
               <p className="text-orange-700">R${item.price_at_purchase.toFixed(2)}</p>
               <p className="text-sm text-gray-600">{item.product_description}</p>
@@ -124,31 +135,54 @@ export function Cart() {
           <div className="mb-4">
             <label className="block text-lg font-bold mb-2 text-gray-700">Calcular Frete:</label>
             <div className="flex items-center gap-4">
-              <input
-                type="text"
-                value={cep}
-                onChange={handleCepChange}
-                placeholder="Digite seu CEP"
-                className="w-full p-3 border-2 border-yellow-400 rounded bg-transparent"
-                maxLength={9}
-              />
-              <button
-                onClick={() => handleCalculateShipping(cep)}
-                className="bg-yellow-400 text-white text-sm font-bold px-4 py-4 rounded shadow h-full border-2 border-yellow-400 hover:border-yellow-600 transition"
-              >
-                Calcular
-              </button>
+              {frete ? (
+                <>
+                  <span className="text-lg font-bold text-green-800 bg-green-100 px-4 py-2 rounded shadow">
+                    Frete: R${frete.toFixed(2)}
+                  </span>
+                  <button
+                    onClick={() => {
+                      setFrete(null);
+                      setCep('');
+                    }}
+                    className="bg-yellow-400 text-white text-sm font-bold px-4 py-2 rounded shadow hover:bg-yellow-500 transition"
+                  >
+                    Calcular outro frete
+                  </button>
+                </>
+              ) : (
+                <>
+                  <input
+                    type="text"
+                    value={cep}
+                    onChange={handleCepChange}
+                    placeholder="Digite seu CEP"
+                    className="w-full p-3 border-2 border-yellow-400 rounded bg-transparent"
+                    maxLength={9}
+                  />
+                  <button
+                    onClick={() => handleCalculateShipping(cep)}
+                    className="bg-yellow-400 text-white text-sm font-bold px-4 py-2 rounded shadow hover:bg-yellow-500 transition"
+                  >
+                    Calcular
+                  </button>
+                </>
+              )}
             </div>
           </div>
           <div className="flex justify-between items-center mb-4">
             <span className="text-xl font-bold text-yellow-900">Total:</span>
             <span className="text-2xl font-bold text-green-700 bg-green-100 px-3 py-1 rounded shadow">
-              ${total.toFixed(2)}
+              R${(total + (frete || 0)).toFixed(2)}
             </span>
           </div>
           <button
             onClick={handleCheckout}
-            className="w-full bg-green-600 text-white text-lg font-bold py-3 rounded shadow hover:bg-green-700 transition"
+            className={`w-full text-white text-lg font-bold py-3 rounded shadow transition ${frete
+                ? 'bg-green-600 hover:bg-green-700'
+                : 'bg-gray-400 cursor-not-allowed'
+              }`}
+            disabled={!frete}
           >
             Realizar Compra
           </button>

@@ -83,7 +83,7 @@ export function HomePage() {
                   <img
                     src={product.picture_url}
                     alt={product.name}
-                    className="w-full h-40 object-cover mb-4 rounded-lg border-2 border-yellow-300"
+                    className="w-full h-50 object-cover mb-4 rounded-lg border-2 border-yellow-300"
                   />
                   <h2 className="text-xl font-bold mb-2 text-green-800">{product.name}</h2>
                   <p className="text-orange-700 mb-4">{product.description}</p>
