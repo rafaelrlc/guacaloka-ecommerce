@@ -52,18 +52,17 @@ export function Login() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(registerData)
       });
-      const data = await res.json();
+      // const data = await res.json();
       console.log("res", res);
       if (res.ok) {
         toast.success('Cadastro realizado com sucesso! Faça login.');
         setIsRegister(false);
       } else {
-        console.log("erro ao cadastrar aqui", data);
-        toast.error(data.message || 'Erro ao cadastrar');
+        toast.error('E-mail já cadastrado, tente outro.');
+        console.log("erro ao cadastrar aqui", res);
       }
     } catch (err) {
       console.log("erro ao cadastrar", err);
-      toast.error('Credenciais inválidas');
     }
   };
 

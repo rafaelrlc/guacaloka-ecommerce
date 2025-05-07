@@ -26,8 +26,14 @@ export function Cart() {
 
   if (!cart || cart.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <img src={carrinhoVazio} alt="Carrinho vazio" className="mx-auto h-[500px] w-[500px] mt-10" />
+      <div className="container mx-auto px-4 py-8 text-center">
+        <img src={carrinhoVazio} alt="Carrinho vazio" className="mx-auto h-[400px] w-[400px] mt-20" />
+        <button
+          onClick={() => navigate('/')}
+          className="bg-yellow-400 text-white text-lg font-bold px-6 py-3 rounded shadow hover:bg-yellow-500 transition"
+        >
+          Visualizar Produtos
+        </button>
       </div>
     );
   }

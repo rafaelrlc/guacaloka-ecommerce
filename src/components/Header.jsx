@@ -29,9 +29,9 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-gradient-to-r from-yellow-400 via-orange-400 to-green-600 shadow-sm z-50">
-      <div className="container mx-auto px-4 py-2 flex justify-between items-center">
+      <div className="w-screen px-4 py-2 flex justify-between items-center border-b-2 border-yellow-400">
         <Link to="/" className="flex items-center gap-3">
-          <img src={guacalokaLogo} alt="Guacaloka Logo" className="h-20 w-20" />
+          <img src={guacalokaLogo} alt="Guacaloka Logo" className="h-20 w-20 ml-4" />
         </Link>
         <div className="flex items-center gap-4">
           <Link
