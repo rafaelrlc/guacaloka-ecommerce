@@ -72,7 +72,7 @@ export function HomePage() {
             ))}
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {products
             .filter(p => !selectedCategory || p.category?.name === selectedCategory)
             .map((product, idx) => (
@@ -85,7 +85,7 @@ export function HomePage() {
                   <img
                     src={product.picture_url}
                     alt={product.name}
-                    className="w-full h-50 object-cover mb-4 rounded-lg border-2 border-yellow-300"
+                    className="w-full h-50 object-cover mb-4 rounded-lg "
                   />
                   <h2 className="text-xl font-bold mb-2 text-green-800">{product.name}</h2>
                   <p className="text-orange-700 mb-4">{product.description}</p>
