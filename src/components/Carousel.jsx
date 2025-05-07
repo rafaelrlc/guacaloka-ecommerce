@@ -30,7 +30,7 @@ export function Carousel() {
   }, []);
 
   return (
-    <div className="relative w-full h-[300px] overflow-hidden mb-8">
+    <div className="relative w-full h-[300px] overflow-hidden">
       {BANNER_IMAGES.map((image, index) => (
         <div
           key={index}

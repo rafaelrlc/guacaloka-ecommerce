@@ -27,8 +27,7 @@ export function Login() {
       console.log("login realizado", data);
       if (res.ok) {
         localStorage.setItem('token', data.token);
-        localStorage.setItem('customer', JSON.stringify(data.customer));
-        login(data.token, data.customer);
+        login(data.token);
         toast.success('Login realizado com sucesso!');
         setTimeout(() => {
           navigate('/');

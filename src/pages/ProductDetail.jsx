@@ -28,8 +28,8 @@ export function ProductDetail() {
         } else {
           setProduct(data[idx]);
         }
-      } catch (err) {
-        setError('Erro ao buscar produto');
+      } catch (error) {
+        setError('Erro ao buscar produto', error);
       } finally {
         setLoading(false);
       }
@@ -62,9 +62,9 @@ export function ProductDetail() {
       navigate('/login');
       return;
     }
-    addToCart(product.id || id, quantity);
+    console.log("produto", product)
+    addToCart(product.product_id, quantity);
     toast.success('Produto adicionado ao carrinho!');
-    navigate('/cart');
   };
 
   return (
@@ -80,7 +80,7 @@ export function ProductDetail() {
           <p className="text-orange-700 mb-6">{product.description}</p>
           <div className="mb-6">
             <span className="text-2xl font-bold text-yellow-900 bg-yellow-200 px-2 py-1 rounded shadow">
-              ${product.price.toFixed(2)}
+              R${product.price.toFixed(2)}
             </span>
             <span className="ml-4 text-green-700 bg-green-100 px-2 py-1 rounded">
               {product.category?.name}

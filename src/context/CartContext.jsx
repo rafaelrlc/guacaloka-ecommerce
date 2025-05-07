@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 const CartContext = createContext();
 
@@ -7,13 +8,10 @@ export function CartProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
 
-  // Busca o carrinho do usuário logado
   const fetchCart = async () => {
-    console.log("fetchCart");
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      console.log("token cart", token);
       const res = await fetch('http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/cart', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -32,16 +30,84 @@ export function CartProvider({ children }) {
     }
   };
 
+  const removeItemFromCart = async (itemId) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/cart/remove_item/${itemId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao remover item do carrinho');
+      }
+      fetchCart();
+    } catch (error) {
+      console.error('Erro ao remover item do carrinho:', error);
+      toast.error('Erro ao remover item do carrinho. Tente novamente mais tarde.');
+    }
+  };
+
+  const placeOrderCheckout = async (order) => {
+    console.log('Order data:', order);
+    try {
+      const response = await fetch('http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/checkout', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(order)
+      });
+  
+      if (!response.ok) {
+        throw new Error('Erro ao finalizar pedido');
+      }
+  
+      const data = await response.json();
+      return data
+    } catch (error) {
+      console.error('Erro ao finalizar pedido:', error);
+      toast.error('Erro ao finalizar pedido. Tente novamente mais tarde.');
+    }
+  }
+
+  const calculateShipping = async (cep) => {
+    if (!cep) {
+      return;
+    }
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/shipping`, {
+        method: 'POST',
+        body: JSON.stringify({ cep }),
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao calcular frete');
+      }
+
+      const data = await response.json();
+      toast.success(`Frete calculado: ${data.frete}`);
+      return data;
+    } catch (error) {
+      console.error('Erro ao calcular frete:', error);
+      toast.error('CEP inválido.');
+    }
+  }
+
   useEffect(() => {
     const token = localStorage.getItem('token');
-    console.log("token cart useEffect", token);
     if (token) fetchCart();
   }, []);
 
-  // Adiciona item ao carrinho via API
   const addToCart = async (productId, quantity) => {
     const token = localStorage.getItem('token');
-    await fetch('http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/cart/item', {
+    await fetch('http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/cart/add_item', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -65,7 +131,7 @@ export function CartProvider({ children }) {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, fetchCart, loading, total }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, fetchCart, loading, total, removeItemFromCart, placeOrderCheckout, calculateShipping }}>
       {children}
     </CartContext.Provider>
   );

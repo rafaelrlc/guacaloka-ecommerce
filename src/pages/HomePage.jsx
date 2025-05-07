@@ -24,7 +24,8 @@ export function HomePage() {
         if (!res.ok) throw new Error('Erro ao buscar produtos');
         const data = await res.json();
         setProducts(data);
-      } catch (err) {
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
         setError('Erro ao buscar produtos');
       } finally {
         setLoading(false);
@@ -88,7 +89,7 @@ export function HomePage() {
                   <p className="text-orange-700 mb-4">{product.description}</p>
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-bold text-yellow-900 bg-yellow-200 px-2 py-1 rounded shadow">
-                      ${product.price.toFixed(2)}
+                      R${product.price.toFixed(2)}
                     </span>
                     <span className="text-sm text-green-700 bg-green-100 px-2 py-1 rounded">
                       {product.category?.name}

@@ -4,41 +4,36 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [customer, setCustomer] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const storedCustomer = localStorage.getItem('customer');
-    if (token && storedCustomer) {
+    console.log('Token from localStorage:', token);
+    
+    if (token) {
       try {
-        const parsedCustomer = JSON.parse(storedCustomer);
         setIsLoggedIn(true);
-        setCustomer(parsedCustomer);
       } catch (error) {
-        console.error('Error parsing customer data:', error);
-        // If there's an error parsing, clear the invalid data
-        localStorage.removeItem('token');
-        localStorage.removeItem('customer');
+        localStorage.removeItem('token', error);
       }
+    } else {
+      console.log('No token or customer found in localStorage');
     }
   }, []);
 
-  const login = (token, customerData) => {
+  const login = (token) => {
+    console.log('Login function called with token:', token);
     localStorage.setItem('token', token);
-    localStorage.setItem('customer', JSON.stringify(customerData));
     setIsLoggedIn(true);
-    setCustomer(customerData);
   };
 
   const logout = () => {
+    console.log('Logout function called');
     localStorage.removeItem('token');
-    localStorage.removeItem('customer');
     setIsLoggedIn(false);
-    setCustomer(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, customer, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
