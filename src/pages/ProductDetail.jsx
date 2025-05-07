@@ -68,7 +68,7 @@ export function ProductDetail() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="h-[calc(100vh-88px)] flex items-center justify-center">
       <div className="max-w-4xl mx-auto bg-gradient-to-br from-yellow-100 via-orange-100 to-green-100 rounded-2xl shadow-lg overflow-hidden border-4 border-yellow-400">
         <div className="p-8">
           <img

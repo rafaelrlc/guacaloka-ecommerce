@@ -58,7 +58,7 @@ export function PurchaseHistory() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-4 py-6 mt-5">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-yellow-900">Histórico de Pedidos</h1>
         <Link
