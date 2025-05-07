@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 export function PurchaseHistory() {
+  const { fetchCart } = useCart();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    fetchCart();
     const fetchOrderHistory = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/orders/history`, {
+        const response = await fetch(`http://ec2-44-201-141-230.compute-1.amazonaws.com:3000/dev/orders`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -31,7 +34,6 @@ export function PurchaseHistory() {
     };
 
     fetchOrderHistory();
-
   }, []);
 
   if (loading) {
@@ -56,7 +58,7 @@ export function PurchaseHistory() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-6">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-yellow-900">Histórico de Compras</h1>
         <Link
@@ -68,7 +70,7 @@ export function PurchaseHistory() {
       </div>
       
       {orders.length === 0 ? (
-        <div className="text-center py-8 bg-gradient-to-br from-yellow-100 via-orange-100 to-green-100 rounded-2xl shadow-lg border-4 border-yellow-400">
+        <div className="text-center py-6 bg-gradient-to-br from-yellow-100 via-orange-100 to-green-100 rounded-2xl shadow-lg border-4 border-yellow-400">
           <p className="text-orange-700 text-lg">Você ainda não realizou nenhuma compra.</p>
           <Link
             to="/"
@@ -78,60 +80,43 @@ export function PurchaseHistory() {
           </Link>
         </div>
       ) : (
-        <div className="space-y-6">
-          {orders.map((order) => (
-            <div key={order.order_id} className="bg-gradient-to-br from-yellow-100 via-orange-100 to-green-100 rounded-2xl shadow-lg p-6 border-4 border-yellow-400">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h2 className="text-xl font-bold text-green-800">Pedido {order.order_id}</h2>
-                  <p className="text-orange-700">
-                    Data: {new Date(order.date).toLocaleDateString('pt-BR', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-lg font-semibold text-yellow-900">
-                    Total: R$ {order.total.toFixed(2)}
-                  </p>
-                  <span className={`inline-block px-3 py-1 rounded-full text-sm ${order.status === 'confirmed' ? 'bg-green-200 text-green-900' : 'bg-yellow-200 text-yellow-900'}`}>
-                    {order.status === 'confirmed' ? 'Confirmado' : order.status}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="border-t pt-4 border-yellow-300">
-                <h3 className="font-semibold text-yellow-900 mb-4">Itens do Pedido:</h3>
-                <div className="space-y-4">
-                  {order.items.map((item, index) => (
-                    <div key={index} className="flex justify-between items-center p-3 bg-green-50 rounded-lg border border-green-200">
-                      <div className="flex items-center space-x-4">
-                        <Link
-                          to={`/product/${item.product_id}`}
-                          className="text-green-700 hover:text-green-800 transition-colors font-bold"
-                        >
-                          Ver produto
-                        </Link>
-                        <span className="text-orange-700">ID: {item.product_id}</span>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <span className="text-green-800">Quantidade: {item.quantity}</span>
-                        <span className="text-yellow-900 font-medium">
-                          R$ {(order.total / order.items.length).toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+        <div className="space-y-4">
+          {orders.map((order) => {
+            const orderContent = (
+              <div className="bg-gradient-to-br from-yellow-100 via-orange-100 to-green-100 rounded-2xl shadow-lg px-6 py-3 border-4 border-yellow-400 transform transition-transform hover:scale-105 hover:shadow-xl">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h2 className="text-xl font-bold text-green-800">Pedido {order.id}</h2>
+                    <p className="text-orange-700">
+                      Data: {new Date(order.created_at).toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                      })}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-semibold text-yellow-900">
+                      Total: R$ {order.total.toFixed(2)}
+                    </p>
+                    <span className={`inline-block px-3 py-1 rounded-full text-sm ${order.status === 'FINALIZADO' ? 'bg-green-200 text-green-900' : 'bg-yellow-200 text-yellow-900'}`}>
+                      {order.status}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+
+            return order.status === 'NO CARRINHO' ? (
+              <div key={order.id} onClick={() => navigate('/cart')} className="cursor-pointer">
+                {orderContent}
+              </div>
+            ) : (
+              <div key={order.id}>{orderContent}</div>
+            );
+          })}
         </div>
       )}
     </div>
   );
-} 
+}

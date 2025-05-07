@@ -55,6 +55,7 @@ export function Cart() {
 
     try {
       const data = placeCheckout(checkoutData);
+      navigate('/purchase-history');
     }
     catch (error) {
       console.error('Erro ao finalizar pedido:', error);
@@ -105,7 +106,7 @@ export function Cart() {
 
     } catch (error) {
       console.error('Erro ao calcular frete:', error);
-      toast.error('Erro ao calcular frete. Tente novamente mais tarde.');
+      // toast.error('Erro ao calcular frete. Tente novamente mais tarde.');
     }
   };
 

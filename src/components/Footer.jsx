@@ -8,18 +8,13 @@ export function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-3 text-gray-800">Sobre Nós</h3>
             <p className="text-gray-600">
-              Sua loja online de confiança para produtos de qualidade.
+              Sua loja de produtos naturais e saudáveis. Oferecemos uma ampla variedade de produtos para atender suas necessidades.
             </p>
           </div>
           
           <div>
             <h3 className="text-lg font-semibold mb-3 text-gray-800">Links Úteis</h3>
             <ul className="space-y-2">
-              <li>
-                <Link to="/" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  Início
-                </Link>
-              </li>
               <li>
                 <Link to="/cart" className="text-gray-600 hover:text-gray-900 transition-colors">
                   Carrinho
@@ -36,16 +31,16 @@ export function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-3 text-gray-800">Contato</h3>
             <ul className="space-y-2 text-gray-600">
-              <li>Email: contato@loja.com</li>
-              <li>Telefone: (11) 9999-9999</li>
-              <li>Endereço: Rua Exemplo, 123</li>
+              <li>Email: contato.guacaloka@loja.com</li>
+              <li>Telefone: (82) 99902-2392</li>
+              <li>Endereço: Rua Alberto Junior, 934</li>
             </ul>
           </div>
         </div>
         
         <div className="border-t border-gray-200 mt-8 pt-6 text-center">
           <p className="text-gray-600">
-            © {new Date().getFullYear()} GuacaLoka. Todos os direitos reservados.
+            © {new Date().getFullYear()} Guacaloka. Todos os direitos reservados.
           </p>
         </div>
       </div>

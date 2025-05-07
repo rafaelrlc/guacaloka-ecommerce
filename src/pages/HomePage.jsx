@@ -2,10 +2,11 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Carousel } from '../components/Carousel';
 import { Footer } from '../components/Footer';
-
+import { useCart } from '../context/CartContext';
 const CATEGORIES = [
   { label: 'Clássico', value: 'Clássico' },
   { label: 'Combos', value: 'Combos' },
+  { label: 'Recomendados', value: 'Recomendados' },
 ];
 
 export function HomePage() {
@@ -13,6 +14,7 @@ export function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const { fetchCart } = useCart();
 
   useEffect(() => {
     async function fetchProducts() {
@@ -31,6 +33,7 @@ export function HomePage() {
       }
     }
     fetchProducts();
+    fetchCart();
   }, []);
 
   if (loading) {
@@ -59,9 +62,9 @@ export function HomePage() {
                 className={`px-3 py-1 rounded-lg font-bold border-2 shadow transition-colors
                   ${selectedCategory === cat.value
                     ? cat.value === 'Books' ? 'bg-yellow-300 text-yellow-900 border-yellow-500'
-                    : cat.value === 'Electronics' ? 'bg-green-300 text-green-900 border-green-500'
-                    : cat.value === 'Clothing' ? 'bg-orange-300 text-orange-900 border-orange-500'
-                    : 'bg-gray-200 text-gray-800 border-gray-400'
+                      : cat.value === 'Electronics' ? 'bg-green-300 text-green-900 border-green-500'
+                        : cat.value === 'Clothing' ? 'bg-orange-300 text-orange-900 border-orange-500'
+                          : 'bg-gray-200 text-gray-800 border-gray-400'
                     : 'bg-white text-gray-700 border-gray-200 hover:bg-yellow-100'}`}
               >
                 {cat.label}
