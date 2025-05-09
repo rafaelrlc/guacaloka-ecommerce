@@ -7,7 +7,6 @@ export function Settings() {
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
 
-    // Atualiza o estado com base no ID correspondente
     setSettings((prevSettings) =>
       prevSettings.map((setting) =>
         setting.id === name ? { ...setting, status: checked } : setting
@@ -21,8 +20,7 @@ export function Settings() {
       const res = saveSettings(settings);
       console.log("res", res);
       toast.success('Configurações salvas com sucesso!');
-    }
-    catch (error) {
+    } catch (error) {
       console.error('Erro ao salvar configurações:', error);
       alert('Erro ao salvar configurações');
       return;
@@ -30,68 +28,78 @@ export function Settings() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-6 mt-5">
-      <h1 className="text-3xl font-bold text-yellow-900 mb-6">Configurações de Funcionalidades</h1>
+    <div className="mx-auto px-6 py-8 mt-6 bg-gradient-to-br from-yellow-100 via-orange-100 to-green-100 rounded-2xl">
+      <h1 className="text-3xl font-extrabold text-yellow-900 mb-4 text-center">Configurações</h1>
 
       {/* Catálogo Section */}
-      <div className="bg-green-50 p-6 rounded-lg shadow-lg border border-green-200 mb-6">
-        <h2 className="text-xl font-semibold text-green-800 mb-4">Catálogo</h2>
-        <div className="space-y-4">
+      <div className="mb-8">
+        <h2 className="text-1xl font-semibold text-green-800 mb-4">Catálogo</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {settings
             .filter((setting) =>
               ['mostrar_recomendacoes', 'mostrar_popup_carrinho', 'mostrar_descricao_produto'].includes(setting.id)
             )
             .map((setting) => (
-              <label key={setting.id} className="flex items-center">
+              <label
+                key={setting.id}
+                className="flex items-center bg-yellow-50 p-4 rounded-lg shadow-md border-2 border-yellow-400"
+              >
                 <input
                   type="checkbox"
                   id={setting.id}
                   name={setting.id}
                   checked={setting.status}
                   onChange={handleCheckboxChange}
-                  className="mr-2"
+                  className="mr-3 h-5 w-5 text-green-600 focus:ring-green-500"
                 />
-                {setting.id === 'mostrar_recomendacoes' && 'Mostrar recomendações feitas para você'}
-                {setting.id === 'mostrar_popup_carrinho' && 'Mostrar popup de adição ao carrinho'}
-                {setting.id === 'mostrar_descricao_produto' && 'Mostrar descrição do produto'}
+                <span className="text-yellow-900 font-medium">
+                  {setting.id === 'mostrar_recomendacoes' && 'Mostrar recomendações de produtos'}
+                  {setting.id === 'mostrar_popup_carrinho' && 'Mostrar popup de adição de produto no carrinho'}
+                  {setting.id === 'mostrar_descricao_produto' && 'Mostrar descrição do produto'}
+                </span>
               </label>
             ))}
         </div>
       </div>
 
       {/* Pagamento Section */}
-      <div className="bg-green-50 p-6 rounded-lg shadow-lg border border-green-200 mb-6">
-        <h2 className="text-xl font-semibold text-green-800 mb-4">Pagamento</h2>
-        <div className="space-y-4">
+      <div className="mb-6">
+        <h2 className="text-1xl font-semibold text-green-800 mb-4">Pagamento</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {settings
             .filter((setting) =>
               ['permitir_pagamento_pix', 'permitir_pagamento_cartao_credito', 'permitir_pagamento_boleto'].includes(setting.id)
             )
             .map((setting) => (
-              <label key={setting.id} className="flex items-center">
+              <label
+                key={setting.id}
+                className="flex items-center bg-yellow-50 p-4 rounded-lg shadow-md border-2 border-yellow-400"
+              >
                 <input
                   type="checkbox"
                   id={setting.id}
                   name={setting.id}
                   checked={setting.status}
                   onChange={handleCheckboxChange}
-                  className="mr-2"
+                  className="mr-3 h-5 w-5 text-green-600 focus:ring-green-500"
                 />
-                {setting.id === 'permitir_pagamento_pix' && 'Permitir pagamento por pix'}
-                {setting.id === 'permitir_pagamento_cartao_credito' && 'Permitir pagamento por cartão de crédito'}
-                {setting.id === 'permitir_pagamento_boleto' && 'Permitir pagamento por boleto'}
+                <span className="text-yellow-900 font-medium">
+                  {setting.id === 'permitir_pagamento_pix' && 'Permitir pagamento por pix'}
+                  {setting.id === 'permitir_pagamento_cartao_credito' && 'Permitir pagamento por cartão de crédito'}
+                  {setting.id === 'permitir_pagamento_boleto' && 'Permitir pagamento por boleto'}
+                </span>
               </label>
             ))}
         </div>
       </div>
 
       {/* Save Button */}
-      <div className="text-right">
+      <div className="text-center">
         <button
           onClick={handleSave}
-          className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-bold shadow"
+          className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-bold shadow-md border-2 border-yellow-400"
         >
-          Salvar
+          Salvar Configurações
         </button>
       </div>
     </div>
