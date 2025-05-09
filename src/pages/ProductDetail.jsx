@@ -5,10 +5,11 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 export function ProductDetail() {
+
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, settings } = useAuth();
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -64,7 +65,9 @@ export function ProductDetail() {
     }
     console.log("produto", product)
     addToCart(product.product_id, quantity);
-    toast.success('Produto adicionado ao carrinho!');
+    if (settings.find((setting) => setting.id === 'mostrar_popup_carrinho').status) {
+      toast.success('Produto adicionado ao carrinho!');
+    }
   };
 
   return (
@@ -77,7 +80,12 @@ export function ProductDetail() {
             className="w-full max-h-[200px] object-contain mb-8 rounded-lg"
           />
           <h1 className="text-3xl font-extrabold mb-4 text-yellow-900">{product.name}</h1>
-          <p className="text-orange-700 mb-6">{product.description}</p>
+
+          {
+            settings.find((setting) => setting.id === 'mostrar_descricao_produto')?.status && (
+              <p className="text-orange-700 mb-6">{product.description}</p>
+            )
+          }
           <div className="mb-6">
             <span className="text-2xl font-bold text-yellow-900 bg-yellow-200 px-2 py-1 rounded shadow">
               R${product.price.toFixed(2)}

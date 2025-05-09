@@ -6,9 +6,11 @@ import { Trash } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 export function Cart() {
   const { cart, loading, fetchCart, removeItemFromCart, placeOrderCheckout, calculateShipping, placeCheckout } = useCart();
+  const { settings } = useAuth();
   const navigate = useNavigate();
 
   const [paymentMethod, setPaymentMethod] = useState('credit_card');
@@ -53,7 +55,7 @@ export function Cart() {
       product_id: item.item_id,
       quantity: item.quantity,
     }));
-  
+
     const checkoutData = {
       cart_items: cartItems,
       payment_method: paymentMethod,
@@ -255,9 +257,15 @@ export function Cart() {
                   onChange={(e) => setPaymentMethod(e.target.value)}
                   className="w-full p-3 border-2 border-yellow-400 rounded bg-white"
                 >
-                  <option value="credit_card">Cartão de Crédito</option>
-                  <option value="pix">Pix</option>
-                  <option value="boleto">Boleto</option>
+                  {settings.find((setting) => setting.id === 'permitir_pagamento_pix')?.status && (
+                    <option value="pix">Pix</option>
+                  )}
+                  {settings.find((setting) => setting.id === 'permitir_pagamento_cartao_credito')?.status && (
+                    <option value="credit_card">Cartão de Crédito</option>
+                  )}
+                  {settings.find((setting) => setting.id === 'permitir_pagamento_boleto')?.status && (
+                    <option value="boleto">Boleto</option>
+                  )}
                 </select>
               </div>
             </div>

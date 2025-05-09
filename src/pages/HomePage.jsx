@@ -3,11 +3,8 @@ import { useEffect, useState } from 'react';
 import { Carousel } from '../components/Carousel';
 import { Footer } from '../components/Footer';
 import { useCart } from '../context/CartContext';
-const CATEGORIES = [
-  { label: 'Clássico', value: 'Clássico' },
-  { label: 'Combos', value: 'Combos' },
-  { label: 'Recomendados', value: 'Recomendados' },
-];
+import { useAuth } from '../context/AuthContext';
+
 
 export function HomePage() {
   const [products, setProducts] = useState([]);
@@ -15,6 +12,16 @@ export function HomePage() {
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('');
   const { fetchCart } = useCart();
+  const { settings } = useAuth();
+
+
+  const CATEGORIES = [
+    { label: 'Clássico', value: 'Clássico' },
+    { label: 'Combos', value: 'Combos' },
+    ...(settings.find((setting) => setting.id === 'mostrar_recomendacoes')?.status
+      ? [{ label: 'Recomendados', value: 'Recomendados' }]
+      : []),
+  ];
 
   useEffect(() => {
     async function fetchProducts() {
@@ -88,7 +95,11 @@ export function HomePage() {
                     className="w-full h-50 object-cover mb-4 rounded-lg "
                   />
                   <h2 className="text-xl font-bold mb-2 text-green-800">{product.name}</h2>
-                  <p className="text-orange-700 mb-4">{product.description}</p>
+                  {
+                    settings.find((setting) => setting.id === 'mostrar_descricao_produto')?.status && (
+                      <p className="text-sm text-gray-700 mb-4">{product.description}</p>
+                    )
+                  }
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-bold text-yellow-900 bg-yellow-200 px-2 py-1 rounded shadow">
                       R${product.price.toFixed(2)}

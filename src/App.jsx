@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
+import { Settings } from './pages/Settings';
 import { Header } from './components/Header';
 import { HomePage } from './pages/HomePage';
 import { ProductDetail } from './pages/ProductDetail';
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/purchase-history" element={<PurchaseHistory />} />
+                <Route path="/settings" element={<Settings />} /> 
               </Routes>
             </main>
             <Toaster position="bottom-right" />
